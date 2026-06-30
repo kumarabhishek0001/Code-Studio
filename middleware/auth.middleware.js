@@ -42,10 +42,11 @@ const authMiddleware = async (req, res, next) => {
       }
     });
   } catch (error) {
+    console.log("error:", error)
     return res.status(500).json({
       error: "INTERNAL SERVER ERROR/middleware error:",
       message: "please try after some time",
-      err: error.message
+      // err: error.message
     });
   }
 };
