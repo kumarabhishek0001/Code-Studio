@@ -26,7 +26,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const token = parts[1];
-    console.log("token:", chalk.blue(token))
+    // console.log("token:", chalk.blue(token))
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
       // console.log("I am here")
@@ -36,7 +36,7 @@ const authMiddleware = async (req, res, next) => {
           message: "malformed token",
         });
       } else {
-        console.log("decoded:", chalk.red(JSON.stringify(decode)));
+        // console.log("decoded:", chalk.red(JSON.stringify(decode)));
         req.id = decode.id;
         next();
       }
