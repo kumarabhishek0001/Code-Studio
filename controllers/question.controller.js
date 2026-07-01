@@ -26,6 +26,12 @@ const createQuestion = async (req, res) => {
     });
   } catch (error) {
     console.log("create-problem-controller issue", error);
+
+    if(error.code === "P2002"){
+      return res.status(400).json({
+      message: "This title is already taken",
+    });
+    }
     return res.status(500).json({
       message: "internal server error",
     });
@@ -86,4 +92,40 @@ const getQuestionByID = async (req, res) => {
 };
 
 
-export { createQuestion, getAllQuestionController, getQuestionByID };
+// TODO: RIGHT NOW ANYONE CAN DELETE ANY QUESTION MAKE SURE ONLY THE CREATOR OF THE QUESTION HAS THAT RIGHT
+const deleteQuestion = async (req, res) => {
+  try {
+    const questionId = Number(req.params.questionId);
+    // console.log(chalk.red(questionId));
+
+    const question = await prisma.problems.findUnique({
+      where: {
+        id: questionId,
+      },
+    });
+
+    if (!question) {
+      return res.status(404).json({
+        message: "Question not found",
+      });
+    }
+
+    const deletedQuestion = await prisma.problems.delete({
+      where: {
+        id: questionId
+      }
+    })
+
+    return res.status(200).json({
+      message: "Question deleted successfully",
+      deletedQuestion
+    })
+  } catch (error) {}
+};
+
+export {
+  createQuestion,
+  getAllQuestionController,
+  getQuestionByID,
+  deleteQuestion,
+};
