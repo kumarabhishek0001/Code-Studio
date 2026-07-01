@@ -8,9 +8,72 @@ datasource db {
 }
 
 model Users {
-  id         String   @id @default(uuid())
-  username   String   @unique
-  email      String   @unique
-  password   String
-  created_at DateTime @default(now())
+  id                   String        @id @default(uuid())
+  username             String        @unique
+  email                String        @unique
+  password             String
+  created_at           DateTime      @default(now())
+  // opposite rel to submission
+  rel_opposite_for_sub Submissions[]
+  
+}
+
+model Problems {
+  id          BigInt      @id @default(autoincrement())
+  title       String      @unique
+  description String
+  difficulty  String
+  created_at  DateTime    @default(now())
+  testcases   TestCases[]
+
+  rel_opposite_for_submissions Submissions[]
+}
+
+model TestCases {
+  id BigInt @id @default(autoincrement())
+
+  // test case realtion with problem 
+  problem                         Problems          @relation(fields: [problem_id], references: [id])
+  // relation FK
+  problem_id                      BigInt
+  input                           String
+  expected_output                 String
+  is_hidden                       Boolean
+  rel_opposite_for_testcaseResult TestCaseResults[]
+}
+
+model TestCaseResults {
+  id                BigInt    @id @default(autoincrement())
+  // foriegn key
+  test_case_id      BigInt
+  // foreign key defination
+  rel_this_testcase TestCases @relation(fields: [test_case_id], references: [id])
+  // foreign key submission
+  submission_key    BigInt
+  // Fk relation
+  rel_this_to_submissions Submissions @relation(fields: [submission_key], references: [id])
+}
+
+model Submissions {
+  id BigInt @id @default(autoincrement())
+
+  // foreign key user
+  user_id String
+
+  // foreign key relation
+  rel_this_to_users Users @relation(fields: [user_id], references: [id])
+
+  // foreign key problems
+  problem_id BigInt
+
+  // fk relation to problem
+  rel_this_to_problems Problems @relation(fields: [problem_id], references: [id])
+
+  code           String
+  language       Int
+  overall_status String
+  runtime_ms     Int?
+  submitted_at   DateTime @default(now())
+
+  rel_opposite_for_testCase_result TestCaseResults[]
 }
