@@ -1,3 +1,4 @@
+import { convertToObject } from "typescript";
 import { prisma } from "../db/prisma.js";
 
 const createQuestion = async (req, res) => {
@@ -30,4 +31,19 @@ const createQuestion = async (req, res) => {
   }
 };
 
-export { createQuestion };
+const getAllQuestionController = async (req, res) => {
+  try {
+    const response = await prisma.Problems.findMany()
+    res.status(200).json({
+      message: "fetched all questions",
+      questions: response
+    })
+  } catch (error) {
+    console.log("problem getallquestioncontroller")
+    res.status(500).json({
+      message: "Internal server error"
+    })
+  }
+}
+
+export { createQuestion, getAllQuestionController };
