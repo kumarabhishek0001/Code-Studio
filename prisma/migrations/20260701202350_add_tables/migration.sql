@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Problems" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "difficulty" TEXT NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE "Problems" (
 
 -- CreateTable
 CREATE TABLE "TestCases" (
-    "id" BIGSERIAL NOT NULL,
-    "problem_id" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "problem_id" INTEGER NOT NULL,
     "input" TEXT NOT NULL,
     "expected_output" TEXT NOT NULL,
     "is_hidden" BOOLEAN NOT NULL,
@@ -22,18 +22,18 @@ CREATE TABLE "TestCases" (
 
 -- CreateTable
 CREATE TABLE "TestCaseResults" (
-    "id" BIGSERIAL NOT NULL,
-    "test_case_id" BIGINT NOT NULL,
-    "submission_key" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "test_case_id" INTEGER NOT NULL,
+    "submission_key" INTEGER NOT NULL,
 
     CONSTRAINT "TestCaseResults_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Submissions" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "user_id" TEXT NOT NULL,
-    "problem_id" BIGINT NOT NULL,
+    "problem_id" INTEGER NOT NULL,
     "code" TEXT NOT NULL,
     "language" INTEGER NOT NULL,
     "overall_status" TEXT NOT NULL,
