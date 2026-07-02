@@ -5,7 +5,6 @@ import chalk from "chalk";
 // PRISMA CLINET IMPORT
 import { prisma } from "../db/prisma.js";
 import { error } from "node:console";
-import { convertToObject } from "typescript";
 
 const createUserController = async (req, res) => {
   try {
