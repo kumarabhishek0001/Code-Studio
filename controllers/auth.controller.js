@@ -5,6 +5,7 @@ import chalk from "chalk";
 // PRISMA CLINET IMPORT
 import { prisma } from "../db/prisma.js";
 import { error } from "node:console";
+import { convertToObject } from "typescript";
 
 const createUserController = async (req, res) => {
   try {
@@ -42,6 +43,11 @@ const createUserController = async (req, res) => {
 
 const loginUserController = async (req, res) => {
   // todo: here i am searching using email first then checking password, instead make this a index and check performance
+  
+  try{
+
+  
+  
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -58,9 +64,9 @@ const loginUserController = async (req, res) => {
   });
 
   if (!response) {
-    return res.status(401).json({
-      error: "UNAUTHORIZED",
-      message: "Invalid credentials",
+    return res.status(404).json({
+      error: "NOT FOUND",
+      message: "User does not exist",
     });
   }
 
@@ -88,6 +94,12 @@ const loginUserController = async (req, res) => {
   return res.status(200).json({
     token
   });
+}catch(err){
+  console.log("Error in login controller: ", err)
+  res.status(500).status({
+    message: "Internal server error"
+  })
+}
 };
 
 export { createUserController, loginUserController };
