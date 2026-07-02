@@ -5,6 +5,7 @@ import chalk from "chalk";
 const createQuestion = async (req, res) => {
   try {
     const { title, description, difficulty } = req.body;
+    const userId = req.id
 
     if (!title || !description || !difficulty) {
       return res.status(400).json({
@@ -17,6 +18,7 @@ const createQuestion = async (req, res) => {
         title: title,
         description: description,
         difficulty: difficulty,
+        created_by: userId
       },
     });
 
@@ -96,6 +98,7 @@ const getQuestionByID = async (req, res) => {
 const deleteQuestion = async (req, res) => {
   try {
     const questionId = Number(req.params.questionId);
+    const req_by_userId = req.id
     // console.log(chalk.red(questionId));
 
     const question = await prisma.problems.findUnique({
@@ -108,6 +111,12 @@ const deleteQuestion = async (req, res) => {
       return res.status(404).json({
         message: "Question not found",
       });
+    }
+
+    if(question.created_by != req_by_userId){
+      return res.status(401).json({
+        message:"only the creator of question can delete it"
+      })
     }
 
     const deletedQuestion = await prisma.problems.delete({
